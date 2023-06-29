@@ -16,3 +16,11 @@
 </div>
 
 <br>
+
+## 🌐 Demo
+
+- Disponível em [`demo-push-notifications.vercel.app`](https://demo-push-notifications.vercel.app/).
+- Após acessar e permitir o recebmento de notificações, envie uma requisição de notificação para o servidor. Exemplo:
+```bash
+curl -X POST https://demo-push-notifications-server.vercel.app/notification/push/send -H "Content-Type: application/json" -d '{"title": "Test 1", "body": "Notification Test"}'
+```

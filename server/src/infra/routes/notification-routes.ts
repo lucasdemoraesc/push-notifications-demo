@@ -29,8 +29,6 @@ router.get("/push/subscribers", async (req: Request, res: Response) => {
 router.post("/push/send", async (req: Request, res: Response) => {
     console.log("/notification/push/send - called");
     const notificationPayload = req.body as INotification;
-    notificationPayload.icon ??= "default";
-    notificationPayload.image ??= "https://maximatech.com.br/wp-content/uploads/2019/04/maximatech-icone-01.jpg";
 
     let result = undefined;
     const subscriptions = await db.listSubscriptions();
