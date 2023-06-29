@@ -1,0 +1,11 @@
+{
+  "name": "push-notifications-demo",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Lucas Corrêa",
+  "scripts": {
+    "start:server": "cd server/ && npm start",
+    "start:client": "cd client/ && npm start",
+    "postinstall": "cd client/ && npm install && cd ../server && npm install"
+  }
+}

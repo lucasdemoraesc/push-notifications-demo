@@ -30,30 +30,28 @@ router.post("/push/send", async (req: Request, res: Response) => {
     console.log("/notification/push/send - called");
     const notificationPayload = req.body as INotification;
 
-    let result = undefined;
     const subscriptions = await db.listSubscriptions();
-    await Promise.all(
-        subscriptions.map(sub =>
-            WebPush.sendNotification(sub, JSON.stringify({ notification: notificationPayload }), {
-                vapidDetails: {
-                    subject: "https://push-server-woad.vercel.app",
-                    publicKey: process.env.VAPID_PUBLICKEY!,
-                    privateKey: process.env.VAPID_PRIVATEKEY!
-                }
-            })
-        ))
-        .then(() => result = { message: 'Notifications sended.' })
-        .catch(err => {
-            result = "Error sending notification, reason: ", err;
-        });
+    if (subscriptions && subscriptions.length > 0)
+        Promise.all(
+            subscriptions.map(sub =>
+                WebPush.sendNotification(sub, JSON.stringify({ notification: notificationPayload }), {
+                    vapidDetails: {
+                        subject: "https://push-server-woad.vercel.app",
+                        publicKey: process.env.VAPID_PUBLICKEY!,
+                        privateKey: process.env.VAPID_PRIVATEKEY!
+                    }
+                })
+            ))
+            .then(() => console.log('Notifications sended.'))
+            .catch(err => console.log("Error sending notification, reason: ", err));
 
-    return res.json(result);
+    return res.json({ message: "Sending notification..." });
 });
 
 router.delete("/push/subscribers", async (req: Request, res: Response) => {
     console.log("/notification/push/subscribers - delete called");
     const result = await db.deleteAllSubscriptions();
-    return res.json(result);
+    return res.json({ message: result });
 });
 
 export { router as NotificationRouter };

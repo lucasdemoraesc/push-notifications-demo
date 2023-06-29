@@ -10,43 +10,68 @@ const connect = async () => {
 
     await mongoose.connect(process.env.MONGODB_URI, { autoIndex: true })
         .then(() => {
-            console.log("Connected to MongoDB.");
+            console.info("Connected to MongoDB.");
         })
         .catch(err => {
-            console.log("MongoDB connection error: ", err);
+            console.error("MongoDB connection error: ", err);
         });
 };
 
+const disconnect = async () => {
+    await mongoose.disconnect();
+    console.info("Disconnected from MongoDB.");
+};
+
 const addSubscription = async (subscription: ISubscription) => {
-    await connect();
-    const subscriptionData = new Subscription(subscription);
-    subscriptionData.save().then(async (file) => {
-        console.log("New subscription saved: ", file);
-        await mongoose.disconnect();
-        Promise.resolve(file);
-    }).catch(async err => {
-        console.log("Error saving subscription: ", err);
-        await mongoose.disconnect();
-        Promise.reject(err);
-    });
+    try {
+        await connect();
+        const subscriptionData = new Subscription(subscription);
+        const saved = await subscriptionData.save();
+        console.log("New subscription saved: ", saved.toJSON());
+        return saved.toJSON();
+    }
+    catch (err) {
+        console.error("Error saving subscription: ", err);
+        return "Error saving subscription: " + err;
+    }
+    finally {
+        await disconnect();
+    }
 };
 
 const listSubscriptions = async () => {
-    await connect();
-    const subscriptions = await Subscription.find().limit(1000).exec();
-    await mongoose.disconnect();
-    return Promise.resolve(subscriptions);
+    try {
+        await connect();
+        const subscriptions = await Subscription.find().lean().exec();
+        return subscriptions;
+    }
+    catch (err) {
+        console.error("Error listing subscriptions: ", err);
+    }
+    finally {
+        await disconnect();
+    }
 };
 
 const deleteAllSubscriptions = async () => {
-    await connect();
-    await Subscription.deleteMany().exec();
-    console.log("All subscriptions deleted.");
-    await mongoose.disconnect();
+    let message = "All subscriptions deleted.";
+    try {
+        await connect();
+        await Subscription.deleteMany().exec();
+    }
+    catch (err) {
+        message = "Error deleting subscriptions: ", err;
+        console.error(message);
+    }
+    finally {
+        await disconnect();
+        console.log(message);
+        return message;
+    }
 };
 
 export const db = {
-    addSubscription: addSubscription,
-    listSubscriptions: listSubscriptions,
-    deleteAllSubscriptions: deleteAllSubscriptions
+    addSubscription,
+    listSubscriptions,
+    deleteAllSubscriptions
 };
