@@ -1,0 +1,11 @@
+<div class="w-100 position-absolute top-0"
+  *ngIf="modalVersion">
+  <div class="alert alert-secondary m-2">
+    <button type="button"
+      class="btn-close position-absolute top-0 end-0 m-1"
+      aria-label="Close"
+      (click)="closeVersion()"></button>
+    A new version of this app is available. <a href=""
+      (click)="updateVersion()">Update now</a>
+  </div>
+</div>

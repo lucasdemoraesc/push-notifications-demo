@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom shadow-sm"
+  style="padding: 8px 16px">
+  <a class="navbar-brand"
+    href="#">
+    <i class="bi bi-bootstrap"
+      style="margin-right: 6px;"></i>
+    <span class="pl-2">Angular PWA Demo v1</span>
+  </a>
+</nav>
+
+<div class="container mt-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      Notificações do browser:
+      <span class="badge"
+        [class.bg-success]="notificationGranted"
+        [class.bg-danger]="!notificationGranted">
+        {{notificationGranted ? "Habilitadas" : "Bloqueadas"}}
+      </span>
+    </li>
+    <!-- <li class="list-group-item">
+      Inscrito para push no server:
+      <span class="badge"
+        [class.bg-success]="pushSubscribed"
+        [class.bg-danger]="!pushSubscribed">
+        {{pushSubscribed ? "Sim" : "Não"}}
+      </span>
+    </li> -->
+    <li class="list-group-item">
+      Service worker:
+      <span class="badge"
+        [class.bg-success]="isOnline"
+        [class.bg-danger]="!isOnline">
+        {{isOnline ? "Online" : "Offline"}}
+      </span>
+    </li>
+  </ul>
+</div>
+<div class="container mt-4">
+  <button class="btn"
+    [class.btn-outline-primary]="!notificationGranted"
+    [class.btn-outline-secondary]="notificationGranted"
+    [disabled]="notificationGranted"
+    (click)="subscribeToNotifications()">
+    Habilitar notificações
+  </button>
+</div>
+
+
+<!-- Modals -->
+<app-wsversion-modal></app-wsversion-modal>
+<app-install-prompt-modal></app-install-prompt-modal>
