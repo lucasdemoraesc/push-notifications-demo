@@ -1,3 +1,3 @@
 export const environment = {
-  apiUrl: 'https://push-server-woad.vercel.app',
+  apiUrl: 'https://demo-push-notifications-server.vercel.app',
 };
