@@ -30,9 +30,10 @@ router.post("/push/send", async (req: Request, res: Response) => {
     console.log("/notification/push/send - called");
     const notificationPayload = req.body as INotification;
 
+    let result: string | undefined;
     const subscriptions = await db.listSubscriptions();
     if (subscriptions && subscriptions.length > 0)
-        Promise.all(
+        await Promise.all(
             subscriptions.map(sub =>
                 WebPush.sendNotification(sub, JSON.stringify({ notification: notificationPayload }), {
                     vapidDetails: {
@@ -41,11 +42,15 @@ router.post("/push/send", async (req: Request, res: Response) => {
                         privateKey: process.env.VAPID_PRIVATEKEY!
                     }
                 })
+                    .then(() => console.log("Notification sended to: ", sub._id))
+                    .catch(err => console.error("Error sending notification, to sub id: ", sub._id, " reason: ", err))
             ))
-            .then(() => console.log('Notifications sended.'))
-            .catch(err => console.log("Error sending notification, reason: ", err));
+            .then(() => result = 'Notifications sended.')
+            .catch(err => {
+                result = "Error sending notification, reason: ", err;
+            });
 
-    return res.json({ message: "Sending notification..." });
+    return res.json({ message: result });
 });
 
 router.delete("/push/subscribers", async (req: Request, res: Response) => {

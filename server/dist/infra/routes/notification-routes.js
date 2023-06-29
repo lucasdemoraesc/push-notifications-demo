@@ -37,18 +37,23 @@ router.get("/push/subscribers", (req, res) => __awaiter(void 0, void 0, void 0, 
 router.post("/push/send", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("/notification/push/send - called");
     const notificationPayload = req.body;
+    let result;
     const subscriptions = yield respository_1.db.listSubscriptions();
     if (subscriptions && subscriptions.length > 0)
-        Promise.all(subscriptions.map(sub => web_push_1.default.sendNotification(sub, JSON.stringify({ notification: notificationPayload }), {
+        yield Promise.all(subscriptions.map(sub => web_push_1.default.sendNotification(sub, JSON.stringify({ notification: notificationPayload }), {
             vapidDetails: {
                 subject: "https://push-server-woad.vercel.app",
                 publicKey: process.env.VAPID_PUBLICKEY,
                 privateKey: process.env.VAPID_PRIVATEKEY
             }
-        })))
-            .then(() => console.log('Notifications sended.'))
-            .catch(err => console.log("Error sending notification, reason: ", err));
-    return res.json({ message: "Sending notification..." });
+        })
+            .then(() => console.log("Notification sended to: ", sub._id))
+            .catch(err => console.error("Error sending notification, to sub id: ", sub._id, " reason: ", err))))
+            .then(() => result = 'Notifications sended.')
+            .catch(err => {
+            result = "Error sending notification, reason: ", err;
+        });
+    return res.json({ message: result });
 }));
 router.delete("/push/subscribers", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("/notification/push/subscribers - delete called");

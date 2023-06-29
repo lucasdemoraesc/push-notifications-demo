@@ -10,7 +10,7 @@
     </div>
     <p align="center"><a href="https://demo-push-notifications.vercel.app/" target="_blank"><i>Demo 🔗</i></a></p>
     <p align="center">
-        <a href="https://github.com/baptisteArno/typebot.io/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
+        <a><img src="https://img.shields.io/badge/license-MIT-blue" /></a>
     </p>
 	<hr>
 </div>
@@ -24,7 +24,7 @@
 ```bash
 curl -X POST https://demo-push-notifications-server.vercel.app/notification/push/send -H "Content-Type: application/json" -d '{"title": "Test 1", "body": "Notification Test"}'
 ```
-- "Title" and "Body" are the only mandatory properties.The list with all properties including optional is available [here](./server/src\models\INotification.ts).
+- "Title" and "Body" are the only mandatory properties. The list with all properties including optional is available [here](./server/src/models/INotification.ts).
 
 ## 🔧 Local setup
 
