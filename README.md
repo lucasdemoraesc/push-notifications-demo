@@ -17,6 +17,8 @@
 
 <br>
 
+> Note: Support for Push Notifications on IOS is available from version 16.04 onwards, and needs to be enabled in Settings -> Safari -> Advanced Options -> Notifications (mark as enabled).
+
 ## 📨 Demo
 
 - Available in [`demo-push-notifications.vercel.app`](https://demo-push-notifications.vercel.app/).
